@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>What's That Thing?</title>
+    <link rel="stylesheet" href="src/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Local product memory</p>
+          <h1>What's That Thing?</h1>
+        </div>
+        <button class="primary-action" type="button" data-open-add>
+          <span aria-hidden="true">+</span>
+          Add Thing
+        </button>
+      </header>
+
+      <main class="workspace">
+        <aside class="sidebar" aria-label="Sections">
+          <nav class="nav-list">
+            <button class="nav-item is-active" type="button" data-view="all">All Things</button>
+            <button class="nav-item" type="button" data-view="Pets">Pets</button>
+            <button class="nav-item" type="button" data-view="Household">Household</button>
+            <button class="nav-item" type="button" data-view="Personal">Personal</button>
+            <button class="nav-item" type="button" data-view="Plants">Plants</button>
+            <button class="nav-item" type="button" data-view="reminders">Reminders</button>
+            <button class="nav-item" type="button" data-view="shopping">Shopping List</button>
+          </nav>
+          <section class="summary-panel" aria-label="Inventory summary">
+            <div>
+              <span id="total-count">0</span>
+              <small>tracked things</small>
+            </div>
+            <div>
+              <span id="due-count">0</span>
+              <small>stock checks</small>
+            </div>
+          </section>
+        </aside>
+
+        <section class="content">
+          <div class="content-header">
+            <div>
+              <p class="eyebrow" id="view-kicker">All Things</p>
+              <h2 id="view-title">Exact products and replacements</h2>
+            </div>
+            <label class="search-box">
+              <span>Search</span>
+              <input id="search-input" type="search" placeholder="Brand, model, flavor, store">
+            </label>
+          </div>
+
+          <section class="add-panel" id="add-panel" hidden>
+            <form id="thing-form">
+              <div class="form-grid">
+                <label>
+                  Thing
+                  <input name="name" required placeholder="Moon's cat food">
+                </label>
+                <label>
+                  Category
+                  <select name="category">
+                    <option>Pets</option>
+                    <option>Household</option>
+                    <option>Personal</option>
+                    <option>Plants</option>
+                  </select>
+                </label>
+                <label>
+                  Usual store or location
+                  <input name="location" placeholder="Chewy; backup at Petco">
+                </label>
+                <label>
+                  Check-stock date
+                  <input name="reminderDate" type="date">
+                </label>
+                <label>
+                  Exact product
+                  <input name="supply" placeholder="Brand, flavor, size, model number">
+                </label>
+                <label>
+                  Stock level
+                  <select name="stockStatus">
+                    <option value="ok">In stock</option>
+                    <option value="low">Running low</option>
+                    <option value="out">Out</option>
+                  </select>
+                </label>
+                <label class="full">
+                  Notes
+                  <textarea name="notes" rows="3" placeholder="Brand, flavor, size, model, usual store, backup store, and gotchas"></textarea>
+                </label>
+              </div>
+              <div class="form-actions">
+                <button class="ghost-action" type="button" data-close-add>Cancel</button>
+                <button class="primary-action" type="submit">Save Thing</button>
+              </div>
+            </form>
+          </section>
+
+          <div class="main-grid">
+            <section>
+              <div id="thing-list" class="thing-list" aria-live="polite"></div>
+              <p id="empty-state" class="empty-state" hidden>No things match this view yet.</p>
+            </section>
+
+            <aside class="detail-panel" aria-label="Details">
+              <div id="detail-empty" class="detail-empty">
+                <p class="eyebrow">Details</p>
+                <h3>Select a thing</h3>
+                <p>Open a saved thing to see exact product notes, stock checks, stores, and shopping actions.</p>
+              </div>
+              <article id="detail-content" hidden></article>
+            </aside>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="src/app.js?v=products-v2" defer></script>
+  </body>
+</html>
