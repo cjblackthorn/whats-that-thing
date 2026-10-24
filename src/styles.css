@@ -448,3 +448,32 @@ label textarea {
     width: 100%;
   }
 }
+
+/* Keyboard navigation and reduced-motion support for the local prototype. */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 700;
+  transform: translateY(calc(-100% - 24px));
+}
+.skip-link:focus { transform: none; }
+:where(a, button, input, textarea, select):focus-visible {
+  outline: 3px solid var(--accent-strong);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px #fff;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
