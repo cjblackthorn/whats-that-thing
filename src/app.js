@@ -153,15 +153,35 @@ els.detailContent.addEventListener("click", (event) => {
 render();
 
 function loadThings() {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (!stored) return seedThings;
+  let stored;
+  try {
+    stored = localStorage.getItem(STORAGE_KEY);
+  } catch {
+    // Browsers can deny localStorage access in restricted modes.
+    return seedThings;
+  }
+  if (stored === null) return seedThings;
 
   try {
     const parsed = JSON.parse(stored);
-    return Array.isArray(parsed) && parsed.length ? parsed : seedThings;
+    if (!Array.isArray(parsed)) return seedThings;
+    // Preserve an intentionally empty inventory; ignore malformed records.
+    return parsed.filter(isValidSavedThing);
   } catch {
     return seedThings;
   }
+}
+
+function isValidSavedThing(thing) {
+  return thing && typeof thing === "object" && !Array.isArray(thing)
+    && typeof thing.id === "string" && /^[a-zA-Z0-9_-]{1,100}$/.test(thing.id)
+    && typeof thing.name === "string" && thing.name.trim().length > 0
+    && ["Pets", "Household", "Personal", "Plants"].includes(thing.category)
+    && ["ok", "low", "out"].includes(thing.stockStatus)
+    && ["location", "notes", "supply"].every((key) => typeof thing[key] === "string")
+    && typeof thing.shopping === "boolean"
+    && typeof thing.reminderDate === "string"
+    && (thing.reminderDate === "" || /^\\d{4}-\\d{2}-\\d{2}$/.test(thing.reminderDate));
 }
 
 function saveThings() {
@@ -264,7 +284,7 @@ function getFilteredThings() {
 
 function cardTemplate(thing) {
   return `
-    <button class="thing-card ${thing.id === selectedId ? "is-selected" : ""}" type="button" data-id="${thing.id}">
+    <button class="thing-card ${thing.id === selectedId ? "is-selected" : ""}" type="button" data-id="${escapeHtml(thing.id)}">
       <div class="thing-card-header">
         <h3>${escapeHtml(thing.name)}</h3>
         <span class="category-pill">${escapeHtml(thing.category)}</span>
@@ -280,7 +300,7 @@ function cardTemplate(thing) {
 
 function shoppingTemplate(thing) {
   return `
-    <button class="shopping-item" type="button" data-id="${thing.id}">
+    <button class="shopping-item" type="button" data-id="${escapeHtml(thing.id)}">
       <span>
         <strong>${escapeHtml(thing.supply || thing.name)}</strong><br>
         <small>${escapeHtml(thing.name)} - ${stockLabel(thing.stockStatus)}</small>
