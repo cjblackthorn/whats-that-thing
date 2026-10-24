@@ -181,7 +181,7 @@ function isValidSavedThing(thing) {
     && ["location", "notes", "supply"].every((key) => typeof thing[key] === "string")
     && typeof thing.shopping === "boolean"
     && typeof thing.reminderDate === "string"
-    && (thing.reminderDate === "" || /^\\d{4}-\\d{2}-\\d{2}$/.test(thing.reminderDate));
+    && (thing.reminderDate === "" || /^\d{4}-\d{2}-\d{2}$/.test(thing.reminderDate));
 }
 
 function saveThings() {
